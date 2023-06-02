@@ -1,31 +1,32 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { Card, Button, Link } from 'react-bootstrap';
 
-const EventCard = ({
-  game,
-  description,
-  date,
-  time,
-  organizer,
-}) => (
+const EventCard = ({ eventObj }) => (
   <Card className="text-center">
-    <Card.Header>Game night: {game}</Card.Header>
+    <Card.Header>Game night: {eventObj.game}</Card.Header>
     <Card.Body>
-      <Card.Title>We will be meeting on {date} at {time}!</Card.Title>
-      <Card.Text>{description}</Card.Text>
+      <Card.Title>We will be meeting on {eventObj.date} at {eventObj.time}!</Card.Title>
+      <Card.Text>{eventObj.description}</Card.Text>
     </Card.Body>
-    <Card.Footer className="text-muted">Organized by: {organizer}</Card.Footer>
+    <Card.Link href="/events/">Edit</Card.Link>
+    <Card.Footer className="text-muted">Organized by: {eventObj.organizer}</Card.Footer>
+    <Link href={`/events/edit/${eventObj.id}`} passHref>
+      <Button type="button" className="m-2">Edit Event</Button>
+    </Link>
+    <Button>Edit Event</Button>
   </Card>
 );
 
 EventCard.propTypes = {
-  game: PropTypes.number.isRequired,
-  description: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  time: PropTypes.string.isRequired,
-  organizer: PropTypes.number.isRequired,
-
+  eventObj: PropTypes.shape({
+    id: PropTypes.number,
+    game: PropTypes.number,
+    description: PropTypes.string,
+    date: PropTypes.string,
+    time: PropTypes.string,
+    organizer: PropTypes.number,
+  }).isRequired,
 };
 
 export default EventCard;

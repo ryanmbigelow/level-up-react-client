@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 import EventCard from '../../components/event/EventCard';
 import { getEvents } from '../../api/eventData';
@@ -7,9 +7,10 @@ import { getEvents } from '../../api/eventData';
 function Home() {
   const router = useRouter();
   const [events, setEvents] = useState([]);
+  const getAllEvents = () => getEvents().then((data) => setEvents(data));
 
   useEffect(() => {
-    getEvents().then((data) => setEvents(data));
+    getAllEvents();
   }, []);
 
   return (
@@ -23,9 +24,9 @@ function Home() {
       </Button>
       <article className="events">
         <h1>Events</h1>
-        {events.map((event) => (
+        {events?.map((event) => (
           <section key={`event--${event.id}`} className="event">
-            <EventCard game={event.game} description={event.description} date={event.date} time={event.time} organizer={event.organizer} />
+            <EventCard eventObj={event} />
           </section>
         ))}
       </article>

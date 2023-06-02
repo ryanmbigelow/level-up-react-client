@@ -37,6 +37,7 @@ const EventForm = ({ user }) => {
       ...prevState,
       [name]: value,
     }));
+    console.log(currentEvent);
   };
 
   const handleSubmit = (e) => {
@@ -71,8 +72,8 @@ const EventForm = ({ user }) => {
             <option value="">Select a Game</option>
             {games.map((game) => (
               <option
-                key={game.title}
-                value={game.title}
+                key={game.id}
+                value={game.id}
               >
                 {game.title}
               </option>
