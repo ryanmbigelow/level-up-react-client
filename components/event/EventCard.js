@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Button, Link } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
+import Link from 'next/link';
 
 const EventCard = ({ eventObj }) => (
   <Card className="text-center">
@@ -11,10 +12,9 @@ const EventCard = ({ eventObj }) => (
     </Card.Body>
     <Card.Link href="/events/">Edit</Card.Link>
     <Card.Footer className="text-muted">Organized by: {eventObj.organizer}</Card.Footer>
-    <Link href={`/events/edit/${eventObj.id}`} passHref>
+    <Link href={`/events/${eventObj.id}`} passHref>
       <Button type="button" className="m-2">Edit Event</Button>
     </Link>
-    <Button>Edit Event</Button>
   </Card>
 );
 

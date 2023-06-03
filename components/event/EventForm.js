@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { createEvent, getOrganizers } from '../../api/eventData';
+import { createEvent, getOrganizers, updateEvent } from '../../api/eventData';
 import { getGames } from '../../api/gameData';
 
 const initialState = {
@@ -13,7 +13,7 @@ const initialState = {
   organizerId: 0,
 };
 
-const EventForm = ({ user }) => {
+const EventForm = ({ user, eventObj }) => {
   const [organizers, setOrganizers] = useState([]);
   const [games, setGames] = useState([]);
   /*
@@ -28,7 +28,8 @@ const EventForm = ({ user }) => {
     // TODO: Get the game types, then set the state
     getOrganizers().then(setOrganizers);
     getGames().then(setGames);
-  }, []);
+    if (eventObj.id) setCurrentEvent(eventObj);
+  }, [eventObj]);
 
   const handleChange = (e) => {
     // TODO: Complete the onChange function
@@ -37,7 +38,6 @@ const EventForm = ({ user }) => {
       ...prevState,
       [name]: value,
     }));
-    console.log(currentEvent);
   };
 
   const handleSubmit = (e) => {
@@ -53,8 +53,13 @@ const EventForm = ({ user }) => {
       userId: user.uid,
     };
 
-    // Send POST request to your API
-    createEvent(event).then(() => router.push('/events'));
+    if (eventObj.id) {
+      updateEvent(currentEvent)
+        .then(() => router.push('/events'));
+    } else {
+      // Send POST request to your API
+      createEvent(event).then(() => router.push('/events'));
+    }
   };
 
   return (
@@ -101,7 +106,7 @@ const EventForm = ({ user }) => {
             value={currentEvent.organizerId}
             required
           >
-            <option value="">Select a Game Type</option>
+            <option value="">Select an Organizer</option>
             {organizers.map((organizer) => (
               <option
                 key={organizer.uid}
@@ -113,7 +118,7 @@ const EventForm = ({ user }) => {
           </Form.Select>
         </Form.Group>
         <Button variant="primary" type="submit">
-          Submit
+          {eventObj.id ? 'Update' : 'Create'} Event
         </Button>
       </Form>
     </>
@@ -123,6 +128,14 @@ const EventForm = ({ user }) => {
 EventForm.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
+  }).isRequired,
+  eventObj: PropTypes.shape({
+    id: PropTypes.number,
+    game: PropTypes.number,
+    description: PropTypes.string,
+    date: PropTypes.string,
+    time: PropTypes.string,
+    organizer: PropTypes.number,
   }).isRequired,
 };
 
