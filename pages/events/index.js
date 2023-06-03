@@ -7,7 +7,9 @@ import { getEvents } from '../../api/eventData';
 function Home() {
   const router = useRouter();
   const [events, setEvents] = useState([]);
-  const getAllEvents = () => getEvents().then((data) => setEvents(data));
+  const getAllEvents = () => {
+    getEvents().then((data) => setEvents(data));
+  };
 
   useEffect(() => {
     getAllEvents();
@@ -24,9 +26,9 @@ function Home() {
       </Button>
       <article className="events">
         <h1>Events</h1>
-        {events?.map((event) => (
+        {events.map((event) => (
           <section key={`event--${event.id}`} className="event">
-            <EventCard eventObj={event} />
+            <EventCard eventObj={event} onUpdate={getAllEvents} />
           </section>
         ))}
       </article>
